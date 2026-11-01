@@ -44,8 +44,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci --ignore-scripts
-      - name: Build prebuilds (arm64 cross-compile)
-        run: npx prebuildify --napi --strip --arch arm64
+      - name: Build native addon (arm64 cross-compile)
+        run: npx node-gyp rebuild --arch=arm64 --verbose
+      - name: Package prebuild (arm64)
+        run: |
+          New-Item -ItemType Directory -Force -Path prebuilds/win32-arm64
+          Copy-Item -Path build/Release/snap_overlay.node -Destination prebuilds/win32-arm64/node.napi.node
       - uses: actions/upload-artifact@v4
         with:
           name: prebuilds-win32-arm64
