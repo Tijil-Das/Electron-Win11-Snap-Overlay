@@ -7,8 +7,10 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
+  # ── Build prebuilt binaries for Windows x64 ────────────────────────────────
   prebuilds-x64:
     name: Prebuilds — Windows x64
     runs-on: windows-latest
@@ -22,10 +24,13 @@ jobs:
       - name: Build prebuilds (x64)
         run: npx prebuildify --napi --strip --arch x64
       - uses: actions/upload-artifact@v4
+      - name: Upload prebuilds (x64)
+        uses: actions/upload-artifact@v4
         with:
           name: prebuilds-win32-x64
           path: prebuilds/
 
+  # ── Build prebuilt binaries for Windows arm64 (cross-compile) ─────────────
   prebuilds-arm64:
     name: Prebuilds — Windows arm64
     runs-on: windows-latest
@@ -39,40 +44,52 @@ jobs:
       - name: Build prebuilds (arm64 cross-compile)
         run: npx prebuildify --napi --strip --arch arm64
       - uses: actions/upload-artifact@v4
+      - name: Upload prebuilds (arm64)
+        uses: actions/upload-artifact@v4
         with:
           name: prebuilds-win32-arm64
           path: prebuilds/
 
+  # ── Publish to npm + create GitHub Release ────────────────────────────────
   publish:
     name: Publish to npm + GitHub Release
     needs: [prebuilds-x64, prebuilds-arm64]
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-      - run: npm ci
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Compile TypeScript
         run: npm run build
+
       - name: Download prebuilds (x64)
         uses: actions/download-artifact@v4
         with:
           name: prebuilds-win32-x64
           path: prebuilds/
+
       - name: Download prebuilds (arm64)
         uses: actions/download-artifact@v4
         with:
           name: prebuilds-win32-arm64
           path: prebuilds/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           files: prebuilds/**/*.node
+
       - name: Publish to npm
-        run: npm publish
+        run: npm publish --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
