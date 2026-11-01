@@ -8,13 +8,12 @@
           "include_dirs": [
             "<!@(node -p \"require('node-addon-api').include\")"
           ],
-          "dependencies": [
-            "<!(node -p \"require('node-addon-api').gyp\")"
-          ],
           "defines": [
             "UNICODE",
             "_UNICODE",
-            "WIN32_LEAN_AND_MEAN"
+            "WIN32_LEAN_AND_MEAN",
+            "NOMINMAX",
+            "NAPI_DISABLE_CPP_EXCEPTIONS"
           ],
           "libraries": [
             "user32.lib"
