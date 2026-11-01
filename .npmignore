@@ -1,0 +1,15 @@
+# Source and tooling not needed in the published package
+src/native/
+.github/
+example/
+tsconfig.json
+.eslintrc*
+.prettierrc*
+*.test.ts
+*.spec.ts
+CONTRIBUTING.md
+
+# Build artifacts
+# NOTE: prebuilds/ is intentionally NOT listed — it ships with the package
+build/
+node_modules/

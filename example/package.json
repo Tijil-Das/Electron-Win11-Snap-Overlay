@@ -1,0 +1,16 @@
+{
+  "name": "electron-win11-snap-overlay-example",
+  "version": "1.0.0",
+  "description": "Minimal working example for electron-win11-snap-overlay",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^36.0.0"
+  },
+  "dependencies": {
+    "electron-win11-snap-overlay": "file:.."
+  }
+}

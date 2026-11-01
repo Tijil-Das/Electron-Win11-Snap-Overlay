@@ -1,0 +1,84 @@
+{
+  "name": "electron-win11-snap-overlay",
+  "version": "1.0.0",
+  "description": "Windows 11 Snap Layout flyout for Electron apps with custom title bars — native Win32 NAPI addon + TypeScript + React hook",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    },
+    "./renderer": {
+      "types": "./dist/renderer.d.ts",
+      "require": "./dist/renderer.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "prebuilds/",
+    "src/native/",
+    "binding.gyp"
+  ],
+  "gypfile": true,
+  "scripts": {
+    "build": "tsc",
+    "build:native": "node-gyp rebuild",
+    "build:prebuilds": "prebuildify --napi --strip",
+    "install": "node-gyp-build || node-gyp rebuild",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "electron",
+    "windows",
+    "windows-11",
+    "snap",
+    "snap-layout",
+    "snap-layouts",
+    "titlebar",
+    "title-bar",
+    "win32",
+    "napi",
+    "native-addon",
+    "maximize",
+    "custom-titlebar",
+    "frameless",
+    "dwm",
+    "htmaxbutton"
+  ],
+  "author": {
+    "name": "Tijil Das",
+    "url": "https://github.com/Tijil-Das"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tijil-Das/Electron-Win11-Snap-Overlay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tijil-Das/Electron-Win11-Snap-Overlay/issues"
+  },
+  "homepage": "https://github.com/Tijil-Das/Electron-Win11-Snap-Overlay#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "electron": ">=28.0.0",
+    "react": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "node-gyp-build": "^4.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.0.0",
+    "node-addon-api": "^8.0.0",
+    "prebuildify": "^6.0.0",
+    "typescript": "^5.6.0"
+  }
+}

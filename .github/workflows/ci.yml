@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build & type-check (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile TypeScript
+        run: npm run build
+
+      - name: Build native addon
+        run: npm run build:native
+
+      - name: Verify addon loads
+        run: |
+          node -e "
+            const path = require('path');
+            const ngb = require('node-gyp-build');
+            const addon = ngb(path.resolve('.'));
+            if (typeof addon.attach !== 'function') throw new Error('attach() missing');
+            console.log('Native addon loaded — attach() present');
+          "
