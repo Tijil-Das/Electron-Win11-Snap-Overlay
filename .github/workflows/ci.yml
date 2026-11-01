@@ -26,7 +26,11 @@ jobs:
         run: npm run build
 
       - name: Build native addon
-        run: npm run build:native
+        run: npx node-gyp rebuild --verbose 2>&1 | Tee-Object -FilePath build.log
+
+      - name: Show build log on failure
+        if: failure()
+        run: Get-Content build.log -Tail 100
 
       - name: Verify addon loads
         run: |
