@@ -32,6 +32,7 @@ jobs:
   prebuilds-arm64:
     name: Prebuilds — Windows arm64
     runs-on: windows-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -50,6 +51,7 @@ jobs:
   publish:
     name: Publish to npm + GitHub Release
     needs: [prebuilds-x64, prebuilds-arm64]
+    if: always() && needs.prebuilds-x64.result == 'success'
     runs-on: ubuntu-latest
 
     steps:
