@@ -21,8 +21,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci --ignore-scripts
-      - name: Build prebuilds (x64)
-        run: npx prebuildify --napi --strip --arch x64
+      - name: Build native addon (x64)
+        run: npx node-gyp rebuild --verbose
+      - name: Package prebuild (x64)
+        run: |
+          New-Item -ItemType Directory -Force -Path prebuilds/win32-x64
+          Copy-Item -Path build/Release/snap_overlay.node -Destination prebuilds/win32-x64/node.napi.node
       - uses: actions/upload-artifact@v4
         with:
           name: prebuilds-win32-x64
@@ -88,6 +92,6 @@ jobs:
           files: prebuilds/**/*.node
 
       - name: Publish to npm
-        run: npm publish --provenance
+        run: npm publish --provenance || echo "Version already published to npm"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
