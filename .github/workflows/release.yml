@@ -23,7 +23,6 @@ jobs:
       - run: npm ci
       - name: Build prebuilds (x64)
         run: npx prebuildify --napi --strip --arch x64
-      - uses: actions/upload-artifact@v4
       - name: Upload prebuilds (x64)
         uses: actions/upload-artifact@v4
         with:
@@ -43,7 +42,6 @@ jobs:
       - run: npm ci
       - name: Build prebuilds (arm64 cross-compile)
         run: npx prebuildify --napi --strip --arch arm64
-      - uses: actions/upload-artifact@v4
       - name: Upload prebuilds (arm64)
         uses: actions/upload-artifact@v4
         with:
